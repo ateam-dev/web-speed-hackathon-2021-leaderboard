@@ -2,6 +2,24 @@ import { ActionFunction } from "@remix-run/cloudflare";
 import { MeasurementRequestForm } from "~/components/MeasurementReuestForm";
 import { Navbar } from "~/components/Navbar";
 import { Box } from "@chakra-ui/react";
+import { LoaderFunction } from "@remix-run/cloudflare";
+import { skipAuth, supabaseStrategy } from "~/libs/auth.server";
+import { supabaseClient } from "~/libs/supabase.server";
+import { User } from "@supabase/supabase-js";
+import { useLoaderData } from "@remix-run/react";
+
+type Data = {
+  user: User | null;
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  if (skipAuth) return { user: null };
+
+  const session = await supabaseStrategy.checkSession(request);
+  const { user } = await supabaseClient.auth.api.getUser(session!.access_token);
+
+  return { user } as Data;
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
@@ -15,10 +33,11 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const Index = () => {
+  const { user } = useLoaderData<Data>();
   return (
     <>
       <Box pos="fixed" w="100%">
-        <Navbar />
+        <Navbar user={user} />
       </Box>
       <MeasurementRequestForm />
     </>
