@@ -1,12 +1,15 @@
-
-
+import { MeasurementRequestForm } from "~/components/MeasurementReuestForm";
+import { Navbar } from "~/components/Navbar";
 import { Box } from "@chakra-ui/react";
 
 const Index = () => {
   return (
-    <Box bg="tomato" w="100%" p={4} color="white">
-      Hello World!
-    </Box>
+    <>
+      <Box pos="fixed" w="100%">
+        <Navbar />
+      </Box>
+      <MeasurementRequestForm />
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import { withEmotionCache } from "@emotion/react";
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import {
   Links,
   LiveReload,
@@ -10,10 +10,11 @@ import {
   useCatch,
 } from "@remix-run/react";
 import { useContext, useEffect } from "react";
-
 import ServerStyleContext from "./styles/server.context";
 import ClientStyleContext from "./styles/client.context";
 import { MetaFunction } from "@remix-run/react/routeModules";
+import { theme } from "~/styles/theme";
+import * as React from "react";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -49,25 +50,26 @@ const Document = withEmotionCache(
 
     return (
       <html lang="en">
-      <head>
-        {title ? <title>{title}</title> : null}
-        <Meta />
-        <Links />
-        {serverStyleData?.map(({ key, ids, css }) => (
-          <style
-            key={key}
-            data-emotion={`${key} ${ids.join(" ")}`}
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: css }}
-          />
-        ))}
-      </head>
-      <body>
-      {children}
-      <ScrollRestoration />
-      <Scripts />
-      <LiveReload />
-      </body>
+        <head>
+          {title ? <title>{title}</title> : null}
+          <Meta />
+          <Links />
+          {serverStyleData?.map(({ key, ids, css }) => (
+            <style
+              key={key}
+              data-emotion={`${key} ${ids.join(" ")}`}
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{ __html: css }}
+            />
+          ))}
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        </head>
+        <body>
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </body>
       </html>
     );
   }
@@ -75,7 +77,7 @@ const Document = withEmotionCache(
 
 export default function App() {
   return (
-    <Document>
+    <Document title="Frontend Performance Contest 2022">
       <ChakraProvider>
         <Outlet />
       </ChakraProvider>
