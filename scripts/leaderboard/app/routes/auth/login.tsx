@@ -20,7 +20,7 @@ type Data = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   await supabaseStrategy.checkSession(request, {
-    successRedirect: "/",
+    successRedirect: "/dashboard",
   });
 
   const { url } = await supabaseClient.auth.signIn(
@@ -33,11 +33,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   );
   return { googleAuthUrl: url } as Data;
 };
-
-export const action: ActionFunction = ({ request }) =>
-  authenticator.authenticate("sb", request, {
-    successRedirect: "/",
-  });
 
 const Login = () => {
   const { googleAuthUrl } = useLoaderData<Data>();

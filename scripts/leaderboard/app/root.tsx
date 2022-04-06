@@ -15,25 +15,12 @@ import ClientStyleContext from "./styles/client.context";
 import { MetaFunction } from "@remix-run/react/routeModules";
 import { theme } from "~/styles/theme";
 import * as React from "react";
-import { LoaderFunction } from "@remix-run/cloudflare";
-import { skipAuth, supabaseStrategy } from "~/libs/auth.server";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Frontend Performance Contest 2022",
   viewport: "width=device-width,initial-scale=1",
 });
-
-export const loader: LoaderFunction = async ({ request }) => {
-  if (skipAuth) return null;
-
-  if (!new URL(request.url).pathname.startsWith("/auth/"))
-    await supabaseStrategy.checkSession(request, {
-      failureRedirect: "/auth/login",
-    });
-
-  return null;
-};
 
 interface DocumentProps {
   children: React.ReactNode;

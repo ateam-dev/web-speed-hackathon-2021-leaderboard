@@ -5,7 +5,7 @@ import { ActionFunction } from "@remix-run/cloudflare";
 
 export const action: ActionFunction = ({ request }) =>
   authenticator.authenticate("sb", request, {
-    successRedirect: "/",
+    successRedirect: "/dashboard",
   });
 
 const AuthCallback = () => {
