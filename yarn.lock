@@ -2,13 +2,6 @@
 # yarn lockfile v1
 
 
-"@afaik/remix-auth-supabase-strategy@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@afaik/remix-auth-supabase-strategy/-/remix-auth-supabase-strategy-3.0.0.tgz#314712386dc66593fc2e5a7ac785462561e76287"
-  integrity sha512-hXI8WZjzX1h/z0vSd5AnzvF5nZE7gfdDmZerj+hX9RcJCc5aoBZSZ3s1X4H8DXEa9a5Md/B/9Gpv2F1pGVmprg==
-  dependencies:
-    remix-auth "^3.2.1"
-
 "@ampproject/remapping@^2.1.0":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.1.2.tgz#4edca94973ded9630d20101cd8559cedb8d8bd34"

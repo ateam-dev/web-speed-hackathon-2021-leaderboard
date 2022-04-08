@@ -1,6 +1,6 @@
 import { Authenticator, AuthorizationError } from "remix-auth";
 import { createCookieSessionStorage } from "@remix-run/cloudflare";
-import { SupabaseStrategy } from "@afaik/remix-auth-supabase-strategy";
+import { SupabaseStrategy } from "remix-auth-supabase";
 import { supabaseClient } from "~/libs/supabase.server";
 import type { Session } from "@supabase/supabase-js";
 import { signup } from "~/graphql/request/Teaming";
