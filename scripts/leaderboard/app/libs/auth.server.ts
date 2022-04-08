@@ -42,9 +42,6 @@ export const supabaseStrategy = new SupabaseStrategy(
         name: session.user.user_metadata.name ?? null,
       });
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      delete session.user;
       return session;
     }
 
