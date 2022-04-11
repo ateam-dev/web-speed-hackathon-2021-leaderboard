@@ -118,8 +118,7 @@ export const getMyTeam = async (variables: MyTeamQueryVariables) => {
     .from("Team")
     .select("*, User!inner(*)")
     .eq("User.email", variables.email)
-    .throwOnError()
-    .maybeSingle();
+    .single();
 
   return data;
 

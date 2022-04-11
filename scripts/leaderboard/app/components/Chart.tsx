@@ -13,7 +13,7 @@ type Props = {
   data: {
     name: string;
     id: string;
-    data: { createdAt: string; score: number }[];
+    data: { createdAt: number; score: number }[];
   }[];
 };
 
@@ -24,8 +24,9 @@ export const Chart = ({ data }: Props) => {
         <CartesianGrid />
         <XAxis
           dataKey="createdAt"
-          type="category"
-          allowDuplicatedCategory={false}
+          domain={["dataMin", "dataMax"]}
+          tickFormatter={(unixTime) => new Date(unixTime).toLocaleString()}
+          type="number"
         />
         <YAxis dataKey="score" />
         <Tooltip />
