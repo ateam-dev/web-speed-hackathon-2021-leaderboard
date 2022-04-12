@@ -11,14 +11,14 @@ datasource db {
 }
 
 generator zod {
-  provider                 = "zod-prisma"
-  output                   = "../app/zod"
-  imports 		             = "../app/zod/customs"
-  relationModel            = true
-  modelCase                = "PascalCase"
-  modelSuffix              = "Model"
-  useDecimalJs             = true
-  prismaJsonNullability    = true
+  provider              = "zod-prisma"
+  output                = "../app/zod"
+  imports               = "../app/zod/customs"
+  relationModel         = true
+  modelCase             = "PascalCase"
+  modelSuffix           = "Model"
+  useDecimalJs          = true
+  prismaJsonNullability = true
 }
 
 model Team {
@@ -65,12 +65,12 @@ enum QueueStatus {
 }
 
 model Queue {
-  id     String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  teamId String      @db.Uuid
-  status QueueStatus @default(WAITING)
-  data   Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  teamId    String      @db.Uuid
+  status    QueueStatus @default(WAITING)
+  data      Json?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now())
 
   Team Team @relation(fields: [teamId], references: [id])
 }
