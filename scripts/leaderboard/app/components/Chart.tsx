@@ -4,7 +4,6 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts";
@@ -41,12 +40,6 @@ export const Chart = ({ data }: Props) => {
           type="number"
         />
         <YAxis dataKey="score" />
-        <Tooltip
-          labelStyle={{ color: "gray" }}
-          labelFormatter={(unixTime) =>
-            new Date(unixTime).toLocaleString().slice(0, -3)
-          }
-        />
         <Legend onMouseOver={mouseEnter} onMouseOut={mouseLeave} />
         {data.map(({ id, name, data }) => (
           <Line
@@ -56,9 +49,15 @@ export const Chart = ({ data }: Props) => {
             data={data}
             name={name}
             key={id}
-            connectNulls
             strokeWidth={3}
-            opacity={hovering === null ? 1 : hovering !== name ? 0.1 : 1}
+            connectNulls
+            animationDuration={1000}
+            label={{
+              fill: strToColor(id),
+              position: "bottom",
+              opacity: hovering !== name ? 0 : 1,
+            }}
+            {...(hovering !== null && hovering !== name && { opacity: 0.1 })}
           />
         ))}
       </LineChart>
