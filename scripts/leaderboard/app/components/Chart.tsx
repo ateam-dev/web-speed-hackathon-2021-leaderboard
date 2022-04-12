@@ -8,6 +8,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useCallback, useState } from "react";
+import { strToColor } from "~/libs/str-to-color";
 
 type Props = {
   data: {
@@ -18,6 +20,14 @@ type Props = {
 };
 
 export const Chart = ({ data }: Props) => {
+  const [hovering, serHovering] = useState<string | null>(null);
+  const mouseEnter = useCallback((e: { value: string }) => {
+    serHovering(e.value);
+  }, []);
+  const mouseLeave = useCallback(() => {
+    serHovering(null);
+  }, []);
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart width={500} height={300}>
@@ -37,7 +47,7 @@ export const Chart = ({ data }: Props) => {
             new Date(unixTime).toLocaleString().slice(0, -3)
           }
         />
-        <Legend />
+        <Legend onMouseOver={mouseEnter} onMouseOut={mouseLeave} />
         {data.map(({ id, name, data }) => (
           <Line
             type="monotone"
@@ -48,17 +58,10 @@ export const Chart = ({ data }: Props) => {
             key={id}
             connectNulls
             strokeWidth={3}
+            opacity={hovering === null ? 1 : hovering !== name ? 0.1 : 1}
           />
         ))}
       </LineChart>
     </ResponsiveContainer>
   );
-};
-
-const strToColor = (str: string) => {
-  const n = Array.from(str)
-    .map((ch) => ch.charCodeAt(0))
-    .reduce((a, b) => a + b);
-  const colorAngle = (n * n) % 360;
-  return `hsl(${colorAngle}, 80%, 64%)`;
 };
