@@ -19,7 +19,7 @@ type Data = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const data = await listTeams(null);
+  const data = await listTeams();
 
   return {
     teams:
@@ -53,7 +53,7 @@ const Teams = () => {
 
   return (
     <>
-      <NewTeamFormModal />
+      {teams.length < 100 && <NewTeamFormModal />}
       <Wrap spacing="30px">
         {teams.map((team) => (
           <WrapItem key={team.id}>
@@ -61,7 +61,6 @@ const Teams = () => {
           </WrapItem>
         ))}
       </Wrap>
-      {/* TODO: pagination */}
     </>
   );
 };
