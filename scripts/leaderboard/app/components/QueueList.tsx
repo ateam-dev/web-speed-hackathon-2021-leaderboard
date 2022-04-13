@@ -9,14 +9,14 @@ import {
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { QueueStatus } from "@prisma/client";
+import { queue_status } from "@prisma/client";
 
 export const QueueList = ({
   queues,
 }: {
   queues: {
     createdAt: string;
-    status: QueueStatus;
+    status: queue_status;
     duration: number | null;
   }[];
 }) => {
@@ -43,7 +43,9 @@ export const QueueList = ({
                 >
                   {status}
                 </Td>
-                <Td isNumeric>{duration !== null ? `${duration} s` : "-"}</Td>
+                <Td isNumeric>
+                  {duration !== null ? `${duration.toLocaleString()} s` : "-"}
+                </Td>
               </Tr>
             ))}
           </Tbody>
@@ -53,7 +55,7 @@ export const QueueList = ({
   );
 };
 
-const statusColor = (status: QueueStatus) => {
+const statusColor = (status: queue_status) => {
   if (status === "WAITING") return "gray";
   if (status === "RUNNING") return "yellow";
   if (status === "DONE") return "green";

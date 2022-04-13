@@ -1,17 +1,17 @@
 import { supabaseClient } from "~/libs/supabase.server";
-import { QueueStatus } from "@prisma/client";
+import { queue_status } from "@prisma/client";
 
 export const myQueues = async ({
   email,
 }: {
   email: string;
 }): Promise<
-  { createdAt: string; status: QueueStatus; duration: null | number }[]
+  { createdAt: string; status: queue_status; duration: null | number }[]
 > => {
   const { data } = await supabaseClient
     .from<{
       createdAt: string;
-      status: QueueStatus;
+      status: queue_status;
       updatedAt: string;
       "Team.User.email": string;
     }>("Queue")
@@ -24,7 +24,9 @@ export const myQueues = async ({
 
   return data.map(({ createdAt, status, updatedAt }) => {
     const duration = ["DONE", "FAILED"].includes(status)
-      ? new Date(updatedAt).getTime() - new Date(createdAt).getTime()
+      ? Math.floor(
+          (new Date(updatedAt).getTime() - new Date(createdAt).getTime()) / 1000
+        )
       : null;
 
     return {

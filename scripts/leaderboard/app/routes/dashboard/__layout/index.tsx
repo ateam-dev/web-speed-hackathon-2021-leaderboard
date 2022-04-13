@@ -6,15 +6,13 @@ import { Chart } from "~/components/Chart";
 import { useLoaderData } from "@remix-run/react";
 import {
   Box,
-  Heading,
   Switch,
   FormControl,
   FormLabel,
   Flex,
   Stack,
-  Spacer,
 } from "@chakra-ui/react";
-import { ObserveMeasurementsAndRefresh } from "~/components/ObserveMeasurements";
+import { ObserveAndRefresh } from "~/components/Observer";
 import { Ranking } from "~/components/Ranking";
 import { useReducer } from "react";
 import { handler } from "~/components/forms/MeasureRequest";
@@ -72,7 +70,7 @@ const Index = () => {
           </Box>
         </Flex>
         {flag ? <Ranking data={scores} /> : <Chart data={scores} />}
-        <ObserveMeasurementsAndRefresh />
+        <ObserveAndRefresh />
       </Box>
       <Stack direction={["column", "row"]} mt={32} spacing={8}>
         <MeasurementRequest teamId={team.id} url={team.pageUrl ?? ""} />
