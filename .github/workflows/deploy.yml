@@ -51,3 +51,4 @@ jobs:
           image: ${{ env.IMAGE }}
           region: ${{ env.GCP_REGION }}
           env_vars: 'SUPABASE_URL="${{ secrets.SUPABASE_URL }}",SUPABASE_ANON_KEY="${{ secrets.SUPABASE_ANON_KEY }}",BUCKET_NAME="${{ secrets.BUCKET_NAME }}"'
+          flags: "--memory=2Gi --concurrency=1"
