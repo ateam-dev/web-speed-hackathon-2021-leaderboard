@@ -40,7 +40,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
-  if (await handler(data)) return null;
+  try {
+    if (await handler(data)) return null;
+  } catch (e) {
+    if (e instanceof Response) return e;
+    throw e;
+  }
 
   throw new Error("invalid request");
 };
