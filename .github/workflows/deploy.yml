@@ -23,7 +23,6 @@ jobs:
             yarn install --frozen-lockfile
             echo $SUPABASE_URL | wrangler secret put SUPABASE_URL
             echo $SUPABASE_ANON_KEY | wrangler secret put SUPABASE_ANON_KEY
-            echo "$SUPABASE_URL/graphql/v1" | wrangler secret put GRAPHQL_URI
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

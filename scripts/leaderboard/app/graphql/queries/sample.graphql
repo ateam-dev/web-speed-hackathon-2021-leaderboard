@@ -1,9 +1,0 @@
-query sample {
-  queueCollection {
-    edges {
-      node {
-        id
-      }
-    }
-  }
-}

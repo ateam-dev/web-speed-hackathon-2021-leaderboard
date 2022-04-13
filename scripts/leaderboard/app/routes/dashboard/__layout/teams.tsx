@@ -1,7 +1,7 @@
 import { TeamCard } from "~/components/TeamCard";
 import { Wrap, WrapItem } from "@chakra-ui/react";
 import { useLoaderData } from "@remix-run/react";
-import { listTeams } from "~/graphql/request/Teaming";
+import { listTeams } from "~/request/Teaming";
 import { ActionFunction, LoaderFunction } from "@remix-run/cloudflare";
 import { NewTeamFormModal } from "~/components/NewTeamFormModal";
 import { useTeamContext } from "~/components/contexts/UserAndTeam";

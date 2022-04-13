@@ -3,7 +3,7 @@ import { supabaseStrategy } from "~/libs/auth.server";
 import { useLoaderData, Outlet } from "@remix-run/react";
 import { Box, Container } from "@chakra-ui/react";
 import { Navbar } from "~/components/Navbar";
-import { getMyTeam } from "~/graphql/request/Teaming";
+import { getMyTeam } from "~/request/Teaming";
 import {
   UserAndTeam,
   UserAndTeamContextProvider,
