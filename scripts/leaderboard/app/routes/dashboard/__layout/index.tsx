@@ -18,10 +18,11 @@ import { ObserveMeasurementsAndRefresh } from "~/components/ObserveMeasurements"
 import { Ranking } from "~/components/Ranking";
 import { useReducer } from "react";
 import { handler } from "~/components/forms/MeasureRequest";
-import { QueueList } from "~/QueueList";
+import { QueueList } from "~/components/QueueList";
 import { myQueues } from "~/request/Queue";
 import { supabaseStrategy } from "~/libs/auth.server";
 import { promiseHash } from "remix-utils";
+import { Statistics } from "~/components/Statistics";
 
 type Data = {
   scores: Awaited<ReturnType<typeof scoresForGraph>>;
@@ -39,7 +40,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
-  if (await handler(data)) return null;
+  try {
+    if (await handler(data)) return null;
+  } catch (e) {
+    if (e instanceof Response) return e;
+    throw e;
+  }
 
   throw new Error("invalid request");
 };
@@ -52,12 +58,9 @@ const Index = () => {
 
   return (
     <>
-      <Box height="500px">
-        <Flex alignItems="end" mb={4}>
-          <Heading as="h2" fontSize={{ base: "xl", sm: "2xl" }}>
-            Score
-          </Heading>
-          <Spacer />
+      <Statistics scores={scores} />
+      <Box mt={8} height="600px">
+        <Flex alignItems="end" mb={4} direction="row-reverse">
           <Box>
             <FormControl display="flex" alignItems="center">
               <FormLabel mb="0">Sequence</FormLabel>

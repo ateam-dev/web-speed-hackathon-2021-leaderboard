@@ -35,7 +35,10 @@ export const myQueues = async ({
   });
 };
 
-export const lineup = async (variables: { teamId: string; pageUrl: string }) => {
+export const lineup = async (variables: {
+  teamId: string;
+  pageUrl: string;
+}) => {
   return Promise.all([
     supabaseClient
       .from("Queue")
@@ -47,4 +50,16 @@ export const lineup = async (variables: { teamId: string; pageUrl: string }) => 
       .eq("id", variables.teamId)
       .throwOnError(),
   ]);
+};
+
+export const hasProcessingQueue = async ({ teamId }: { teamId: string }) => {
+  const { data } = await supabaseClient
+    .from("Queue")
+    .select("*")
+    .match({ teamId })
+    .in("status", ["WAITING", "RUNNING"])
+    .limit(1)
+    .throwOnError();
+
+  return data && data.length > 0;
 };

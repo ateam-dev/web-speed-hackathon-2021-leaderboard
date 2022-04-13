@@ -22,11 +22,11 @@ export const Ranking = ({ data }: Props) => {
     () =>
       data
         .map(({ id, name, data }) => {
-          const [latest] = data.slice(-1);
+          const [{ score } = { score: 0 }] = data.slice(-1);
           return {
             id,
             name,
-            score: latest.score,
+            score,
           };
         })
         .sort(({ score: a }, { score: b }) => (a > b ? -1 : 1)),
@@ -41,7 +41,13 @@ export const Ranking = ({ data }: Props) => {
             <Cell key={id} fill={strToColor(id)} />
           ))}
         </Bar>
-        <XAxis dataKey="name" />
+        <XAxis
+          dataKey="name"
+          angle={45}
+          textAnchor="start"
+          height={150}
+          interval={0}
+        />
         <YAxis />
       </BarChart>
     </ResponsiveContainer>
