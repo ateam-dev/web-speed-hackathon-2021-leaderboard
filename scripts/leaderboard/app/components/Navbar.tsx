@@ -30,11 +30,11 @@ export const Navbar = ({ user }: Props) => {
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <Box>
-            <Link to="/dashboard">
+            <a href="/dashboard">
               <Heading as="h1" fontSize={{ base: "xl", sm: "2xl" }}>
                 FPC 2022
               </Heading>
-            </Link>
+            </a>
           </Box>
 
           <Flex alignItems={"center"}>

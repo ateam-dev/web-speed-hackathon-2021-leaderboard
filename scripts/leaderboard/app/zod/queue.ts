@@ -1,6 +1,6 @@
 import * as z from "zod"
 import * as imports from "./customs"
-import { QueueStatus } from "@prisma/client"
+import { queue_status } from "@prisma/client"
 import { CompleteTeam, RelatedTeamModel } from "./index"
 
 // Helper schema for JSON fields
@@ -12,7 +12,7 @@ const jsonSchema: z.ZodSchema<Json> = z.lazy(() => z.union([literalSchema, z.arr
 export const QueueModel = z.object({
   id: z.string(),
   teamId: z.string(),
-  status: z.nativeEnum(QueueStatus),
+  status: z.nativeEnum(queue_status),
   data: jsonSchema,
   createdAt: z.date(),
   updatedAt: z.date(),
