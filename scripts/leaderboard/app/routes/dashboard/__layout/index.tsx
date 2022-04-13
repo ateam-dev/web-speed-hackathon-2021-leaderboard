@@ -1,7 +1,7 @@
 import { MeasurementRequest } from "~/components/MeasurementReuest";
 import { ActionFunction, LoaderFunction } from "@remix-run/cloudflare";
 import { useTeamContext } from "~/components/contexts/UserAndTeam";
-import { scoresForGraph } from "~/graphql/request/Measurement";
+import { scoresForGraph } from "~/request/Measurement";
 import { Chart } from "~/components/Chart";
 import { useLoaderData } from "@remix-run/react";
 import {
@@ -19,7 +19,7 @@ import { Ranking } from "~/components/Ranking";
 import { useReducer } from "react";
 import { handler } from "~/components/forms/MeasureRequest";
 import { QueueList } from "~/QueueList";
-import { myQueues } from "~/graphql/request/Queue";
+import { myQueues } from "~/request/Queue";
 import { supabaseStrategy } from "~/libs/auth.server";
 import { promiseHash } from "remix-utils";
 

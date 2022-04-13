@@ -16,7 +16,7 @@ import {
   FormProps,
 } from "remix-validated-form";
 import { ComponentProps } from "react";
-import { lineup } from "~/graphql/request/Queue";
+import { lineup } from "~/request/Queue";
 import { z } from "zod";
 
 const zodFormModel = QueueModel.pick({ teamId: true }).merge(

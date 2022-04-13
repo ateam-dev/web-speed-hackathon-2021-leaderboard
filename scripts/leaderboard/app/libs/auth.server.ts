@@ -3,7 +3,7 @@ import { createCookieSessionStorage } from "@remix-run/cloudflare";
 import { SupabaseStrategy } from "remix-auth-supabase";
 import { supabaseClient } from "~/libs/supabase.server";
 import type { Session } from "@supabase/supabase-js";
-import { signup } from "~/graphql/request/Teaming";
+import { signup } from "~/request/Teaming";
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {

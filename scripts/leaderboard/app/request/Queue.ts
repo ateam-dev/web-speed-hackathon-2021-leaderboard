@@ -1,9 +1,3 @@
-// import { client } from "../apollo-client";
-import {
-  // LineupDocument,
-  // LineupMutation,
-  LineupMutationVariables,
-} from "generated/graphql";
 import { supabaseClient } from "~/libs/supabase.server";
 import { QueueStatus } from "@prisma/client";
 
@@ -41,7 +35,7 @@ export const myQueues = async ({
   });
 };
 
-export const lineup = async (variables: LineupMutationVariables) => {
+export const lineup = async (variables: { teamId: string; pageUrl: string }) => {
   return Promise.all([
     supabaseClient
       .from("Queue")
@@ -53,15 +47,4 @@ export const lineup = async (variables: LineupMutationVariables) => {
       .eq("id", variables.teamId)
       .throwOnError(),
   ]);
-
-  // try {
-  //   return await client.mutate<LineupMutation, LineupMutationVariables>({
-  //     mutation: LineupDocument,
-  //     variables,
-  //   });
-  // } catch (e) {
-  //   console.error(e);
-  //
-  //   throw e;
-  // }
 };

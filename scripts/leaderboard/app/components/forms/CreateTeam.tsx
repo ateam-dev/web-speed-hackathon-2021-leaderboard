@@ -14,7 +14,7 @@ import {
   validationError,
   ValidatedForm,
 } from "remix-validated-form";
-import { createTeam } from "~/graphql/request/Teaming";
+import { createTeam } from "~/request/Teaming";
 import { ReactNode, useEffect } from "react";
 
 const validator = withZod(TeamModel.pick({ name: true }));

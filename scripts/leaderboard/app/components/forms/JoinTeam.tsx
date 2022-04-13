@@ -7,7 +7,7 @@ import {
   validationError,
   ValidatedForm,
 } from "remix-validated-form";
-import { joinTeam } from "~/graphql/request/Teaming";
+import { joinTeam } from "~/request/Teaming";
 import { useUserContext } from "~/components/contexts/UserAndTeam";
 
 const validator = withZod(UserModel.pick({ teamId: true, email: true }));
