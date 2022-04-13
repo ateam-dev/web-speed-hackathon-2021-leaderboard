@@ -16,18 +16,27 @@ import {
   FormProps,
 } from "remix-validated-form";
 import { ComponentProps } from "react";
-import { lineup } from "~/request/Queue";
+import { hasProcessingQueue, lineup } from "~/request/Queue";
 import { z } from "zod";
 
 const zodFormModel = QueueModel.pick({ teamId: true }).merge(
   TeamModel.extend({ pageUrl: z.string().url() }).pick({ pageUrl: true })
 );
 
-const validator = withZod(zodFormModel);
+const clientValidator = withZod(zodFormModel);
+const serverValidator = withZod(
+  zodFormModel.refine(
+    async (data) => {
+      const having = await hasProcessingQueue({ teamId: data.teamId });
+      return !having;
+    },
+    { message: "Jobs are in measurement or waiting.", path: ["pageUrl"] }
+  )
+);
 
 export const handler = async (data: FormData) => {
   if (!data.has("lineup")) return;
-  const fieldValues = await validator.validate(data);
+  const fieldValues = await serverValidator.validate(data);
   if (fieldValues.error) throw validationError(fieldValues.error);
   const { teamId, pageUrl } = fieldValues.data;
 
@@ -41,7 +50,7 @@ export const MeasureRequestFormWrapper = ({
   ...props
 }: Partial<FormProps<z.infer<typeof zodFormModel>>>) => {
   return (
-    <ValidatedForm method="post" validator={validator} {...props}>
+    <ValidatedForm method="post" validator={clientValidator} {...props}>
       {children}
     </ValidatedForm>
   );

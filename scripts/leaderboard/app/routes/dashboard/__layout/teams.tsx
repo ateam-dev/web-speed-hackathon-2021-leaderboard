@@ -2,7 +2,11 @@ import { TeamCard } from "~/components/TeamCard";
 import { Wrap, WrapItem } from "@chakra-ui/react";
 import { useLoaderData } from "@remix-run/react";
 import { listTeams } from "~/request/Teaming";
-import { ActionFunction, LoaderFunction } from "@remix-run/cloudflare";
+import {
+  ActionFunction,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/cloudflare";
 import { NewTeamFormModal } from "~/components/NewTeamFormModal";
 import { useTeamContext } from "~/components/contexts/UserAndTeam";
 import { handler as newTeamHandler } from "~/components/forms/CreateTeam";
@@ -32,8 +36,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
-  if (await newTeamHandler(data)) return null;
-  if (await joinTeamHandler(data)) return null;
+  try {
+    if (await newTeamHandler(data)) return null;
+    if (await joinTeamHandler(data)) return redirect("/dashboard");
+  } catch (e) {
+    if (e instanceof Response) return e;
+    throw e;
+  }
 
   throw new Error("invalid request");
 };

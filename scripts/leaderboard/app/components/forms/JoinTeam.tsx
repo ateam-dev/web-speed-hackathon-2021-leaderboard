@@ -9,8 +9,11 @@ import {
 } from "remix-validated-form";
 import { joinTeam } from "~/request/Teaming";
 import { useUserContext } from "~/components/contexts/UserAndTeam";
+import { z } from "zod";
 
-const validator = withZod(UserModel.pick({ teamId: true, email: true }));
+const validator = withZod(
+  UserModel.pick({ teamId: true, email: true }).extend({ teamId: z.string() })
+);
 
 export const handler = async (data: FormData) => {
   if (!data.has("joinTeam")) return;
