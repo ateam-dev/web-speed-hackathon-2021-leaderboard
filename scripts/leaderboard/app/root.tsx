@@ -15,6 +15,8 @@ import ClientStyleContext from "./styles/client.context";
 import { MetaFunction } from "@remix-run/react/routeModules";
 import { theme } from "~/styles/theme";
 import * as React from "react";
+import { StatusPage } from "~/components/StatusPage";
+import { ErrorPage } from "~/components/ErrorPage";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -91,9 +93,7 @@ export function CatchBoundary() {
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>
       <ChakraProvider>
-        <p>
-          [CatchBoundary]: {caught.status} {caught.statusText}
-        </p>
+        <StatusPage {...caught} />
       </ChakraProvider>
     </Document>
   );
@@ -103,7 +103,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   return (
     <Document title="Error!">
       <ChakraProvider>
-        <p>[ErrorBoundary]: There was an error: {error.message}</p>
+        <ErrorPage message={error.message} />
       </ChakraProvider>
     </Document>
   );

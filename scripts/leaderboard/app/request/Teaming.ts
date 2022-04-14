@@ -17,7 +17,10 @@ export const createTeam = async (variables: { name: string }) => {
   return data;
 };
 
-export const joinTeam = async (variables: { teamId: string; email: string }) => {
+export const joinTeam = async (variables: {
+  teamId: string;
+  email: string;
+}) => {
   const { data } = await supabaseClient
     .from("User")
     .update({ teamId: variables.teamId })
@@ -26,11 +29,7 @@ export const joinTeam = async (variables: { teamId: string; email: string }) => 
   return data;
 };
 
-export const listTeams = async (
-  cursor: string | null,
-  prev = false,
-  page = 1
-): Promise<
+export const listTeams = async (): Promise<
   {
     users: { email: string; name: string }[];
     id: string;
@@ -42,7 +41,7 @@ export const listTeams = async (
     .from("Team")
     .select("id, name, pageUrl, users:User(email, name)")
     .order("createdAt", { ascending: false })
-    .range((page - 1) * 30, page * 30 - 1)
+    .limit(100)
     .throwOnError();
 
   return data ?? [];
