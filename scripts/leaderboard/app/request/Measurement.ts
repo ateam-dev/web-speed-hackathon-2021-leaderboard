@@ -16,7 +16,7 @@ export const scoresForGraph = async () => {
       data: data
         .sort(({ createdAt: a }, { createdAt: b }) => (a > b ? 1 : -1))
         .map(({ createdAt, score }) => ({
-          createdAt: new Date(createdAt).getTime(),
+          createdAt: new Date(createdAt + "+0900").getTime(),
           score,
         })),
     })) ?? []
