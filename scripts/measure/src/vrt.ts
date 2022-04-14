@@ -24,7 +24,7 @@ const uploadVrt = async (id: string) => {
   archive.directory('./tmp/actual', 'actual');
   archive.directory('./tmp/diff', 'diff');
   archive.file('./tmp/reg.json', { name: 'reg.json' });
-  archive.finalize();
+  await archive.finalize();
 
   // Google Cloud Storageにアップロード
   const storage = new Storage();
