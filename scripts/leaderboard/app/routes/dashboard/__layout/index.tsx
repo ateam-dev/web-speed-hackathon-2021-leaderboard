@@ -1,5 +1,9 @@
 import { MeasurementRequest } from "~/components/MeasurementReuest";
-import { ActionFunction, LoaderFunction } from "@remix-run/cloudflare";
+import {
+  ActionFunction,
+  LoaderFunction,
+  redirect,
+} from "@remix-run/cloudflare";
 import { useTeamContext } from "~/components/contexts/UserAndTeam";
 import { scoresForGraph } from "~/request/Measurement";
 import { Chart } from "~/components/Chart";
@@ -28,6 +32,10 @@ type Data = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+  // TODO: remove
+  if (process.env.NODE_ENV === "production")
+    return redirect("/dashboard/standby");
+
   const session = await supabaseStrategy.checkSession(request);
 
   return promiseHash({
@@ -36,7 +44,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 };
 
-export const action: ActionFunction = async ({ request, context: { event } }: { request: Request, context: { event: FetchEvent }}) => {
+export const action: ActionFunction = async ({
+  request,
+  context: { event },
+}: {
+  request: Request;
+  context: { event: FetchEvent };
+}) => {
   const data = await request.formData();
   try {
     if (await handler(data, event)) return null;
