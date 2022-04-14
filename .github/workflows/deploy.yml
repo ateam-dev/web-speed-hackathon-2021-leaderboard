@@ -24,11 +24,13 @@ jobs:
             echo $SUPABASE_URL | wrangler secret put SUPABASE_URL
             echo $SUPABASE_ANON_KEY | wrangler secret put SUPABASE_ANON_KEY
             echo $SUPABASE_API_KEY | wrangler secret put SUPABASE_API_KEY
+            echo $ALLOWED_EMAIL_DOMAIN | wrangler secret put ALLOWED_EMAIL_DOMAIN
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+          ALLOWED_EMAIL_DOMAIN: ${{ secrets.ALLOWED_EMAIL_DOMAIN }}
   deploy-measure:
     runs-on: ubuntu-latest
     steps:
