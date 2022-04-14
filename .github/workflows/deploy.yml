@@ -53,5 +53,5 @@ jobs:
           service: web-speed-hackathon-2021-measure
           image: ${{ env.IMAGE }}
           region: ${{ env.GCP_REGION }}
-          env_vars: 'SUPABASE_URL="${{ secrets.SUPABASE_URL }}",SUPABASE_API_KEY="${{ secrets.SUPABASE_API_KEY }}",BUCKET_NAME="${{ secrets.BUCKET_NAME }}"'
+          env_vars: 'SUPABASE_URL=${{ secrets.SUPABASE_URL }},SUPABASE_API_KEY=${{ secrets.SUPABASE_API_KEY }},BUCKET_NAME=${{ secrets.BUCKET_NAME }}'
           flags: "--allow-unauthenticated --memory=2Gi --concurrency=1"
