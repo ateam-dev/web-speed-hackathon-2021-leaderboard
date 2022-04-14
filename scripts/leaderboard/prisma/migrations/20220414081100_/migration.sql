@@ -1,0 +1,13 @@
+-- This code was created manually.
+-- enable moddatetime
+create extension if not exists moddatetime schema extensions;
+
+-- create trigger
+create trigger handle_updated_at_Team before update on "Team"
+    for each row execute procedure moddatetime ("updatedAt");
+create trigger handle_updated_at_User before update on "User"
+    for each row execute procedure moddatetime ("updatedAt");
+create trigger handle_updated_at_Measurement before update on "Measurement"
+    for each row execute procedure moddatetime ("updatedAt");
+create trigger handle_updated_at_Queue before update on "Queue"
+    for each row execute procedure moddatetime ("updatedAt");
