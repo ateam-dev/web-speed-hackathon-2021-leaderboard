@@ -33,6 +33,15 @@ export const supabaseStrategy = new SupabaseStrategy(
         throw new AuthorizationError(error?.message ?? "No user session found");
       }
 
+      if (
+        ALLOWED_EMAIL_DOMAIN &&
+        !session.user.email.endsWith(`@${ALLOWED_EMAIL_DOMAIN}`)
+      ) {
+        throw new AuthorizationError(
+          "You are an unauthorized organization user."
+        );
+      }
+
       await signup({
         email: session.user.email,
         name: session.user.user_metadata.name ?? null,
