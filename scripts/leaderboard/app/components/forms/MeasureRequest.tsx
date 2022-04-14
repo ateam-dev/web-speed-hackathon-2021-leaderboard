@@ -17,6 +17,7 @@ import {
 } from "remix-validated-form";
 import { ComponentProps } from "react";
 import { hasProcessingQueue, lineup } from "~/request/Queue";
+import { activate } from "~/request/Measurement";
 import { z } from "zod";
 
 const zodFormModel = QueueModel.pick({ teamId: true }).merge(
@@ -34,13 +35,17 @@ const serverValidator = withZod(
   )
 );
 
-export const handler = async (data: FormData) => {
+export const handler = async (data: FormData, event: FetchEvent) => {
   if (!data.has("lineup")) return;
   const fieldValues = await serverValidator.validate(data);
   if (fieldValues.error) throw validationError(fieldValues.error);
   const { teamId, pageUrl } = fieldValues.data;
 
-  await lineup({ teamId, pageUrl });
+  const res = await lineup({ teamId, pageUrl });
+  if (res[0].data === null) {
+    return false;
+  }
+  event.waitUntil(activate(res[0].data[0].id));
 
   return true;
 };

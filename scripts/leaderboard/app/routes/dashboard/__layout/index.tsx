@@ -36,10 +36,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, context: { event } }: { request: Request, context: { event: FetchEvent }}) => {
   const data = await request.formData();
   try {
-    if (await handler(data)) return null;
+    if (await handler(data, event)) return null;
   } catch (e) {
     if (e instanceof Response) return e;
     throw e;

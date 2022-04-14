@@ -22,3 +22,14 @@ export const scoresForGraph = async () => {
     })) ?? []
   );
 };
+
+export const activate = async (queueId: string) => {
+  const response = await fetch(
+    `${MEASURE_SERVER_URI}/execute/${queueId}`,
+    {
+      method: 'POST',
+    }
+  )
+
+  return response
+}
