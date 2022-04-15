@@ -18,6 +18,11 @@ services:
       - ./scripts/create-ogp/package.json:/app/scripts/create-ogp/package.json
       - ./scripts/leaderboard/package.json:/app/scripts/leaderboard/package.json
       - ./scripts/update-leaderboard/package.json:/app/scripts/update-leaderboard/package.json
+    environment:
+      - SUPABASE_URL
+      - SUPABASE_API_KEY
+      - GOOGLE_APPLICATION_CREDENTIALS
+      - BUCKET_NAME
     ports:
       - 8080:8080
     tty: true
