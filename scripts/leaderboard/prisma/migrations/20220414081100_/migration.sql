@@ -1,6 +1,6 @@
 -- This code was created manually.
 -- enable moddatetime
-create extension if not exists moddatetime schema extensions;
+create extension moddatetime;
 
 -- create trigger
 create trigger handle_updated_at_Team before update on "Team"
