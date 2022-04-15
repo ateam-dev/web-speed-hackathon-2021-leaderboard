@@ -6,6 +6,7 @@ export const MeasurementModel = z.object({
   id: z.string(),
   teamId: z.string(),
   score: z.number(),
+  message: z.string(),
   vrtUrl: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),

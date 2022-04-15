@@ -6,11 +6,16 @@ import { Storage } from '@google-cloud/storage';
 import { main as mainVrt } from '@web-speed-hackathon/vrt';
 
 export const executeVrt = async (id: string, url: string) => {
-  // VRTの実行
-  await mainVrt(url);
-  // 差分チェック
-  execSync('reg-cli ./tmp/actual ../vrt/expected ./tmp/diff -M 0.15 -T 0.005 -I -J ./tmp/reg.json');
-  return uploadVrt(id);
+  try {
+    // VRTの実行
+    await mainVrt(url);
+    // 差分チェック
+    execSync('reg-cli ./tmp/actual ../vrt/expected ./tmp/diff -M 0.15 -T 0.005 -I -J ./tmp/reg.json');
+    return uploadVrt(id);
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: 'VRTを正常に実行できませんでした。', url: null };
+  }
 }
 
 const uploadVrt = async (id: string) => {
@@ -26,6 +31,8 @@ const uploadVrt = async (id: string) => {
   archive.file('./tmp/reg.json', { name: 'reg.json' });
   await archive.finalize();
 
+  const regJson = JSON.parse(fs.readFileSync('./tmp/reg.json', 'utf8'));
+
   // Google Cloud Storageにアップロード
   const storage = new Storage();
   const bucket = storage.bucket(process.env['BUCKET_NAME'] || '');
@@ -37,5 +44,9 @@ const uploadVrt = async (id: string) => {
     }
   );
 
-  return uploadResponse[0].publicUrl();
+  if (regJson.failedItems.length !== 0) {
+    return { success: false, message: '一部のページに差分があります', url: uploadResponse[0].publicUrl() };
+  }
+
+  return { success: true, message: '差分はありませんでした', url: uploadResponse[0].publicUrl() };
 }

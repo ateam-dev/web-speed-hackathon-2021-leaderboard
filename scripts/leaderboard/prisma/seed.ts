@@ -25,6 +25,7 @@ const measure = () => {
   return {
     score,
     vrtUrl: 'https://example.com/archive.zip',
+    message: '正常に計測が完了しました。',
     createdAt: datetime,
     updatedAt: datetime,
   };
