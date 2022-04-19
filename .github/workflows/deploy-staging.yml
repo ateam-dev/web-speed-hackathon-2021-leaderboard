@@ -10,14 +10,11 @@ on:
 env:
   GCP_REGION: ${{ secrets.GCP_REGION }}
   IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/web-speed-hackathon-2021-measure:${{ github.sha }}
-  DATABASE_URL: ${{ secrets.DATABASE_URL_STAGING }}
-  SUPABASE_URL: ${{ secrets.SUPABASE_URL_STAGING }}
-  SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY_STAGING }}
-  SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY_STAGING }}
-  MEASURE_SERVER_URI: ${{ secrets.MEASURE_SERVER_URI_STAGING }}
 
 jobs:
   deploy-frontend:
+    environment:
+      name: staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -49,6 +46,8 @@ jobs:
           ALLOWED_EMAIL_DOMAIN: ${{ secrets.ALLOWED_EMAIL_DOMAIN }}
           MEASURE_SERVER_URI: ${{ secrets.MEASURE_SERVER_URI }}
   deploy-measure:
+    environment:
+      name: staging
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
