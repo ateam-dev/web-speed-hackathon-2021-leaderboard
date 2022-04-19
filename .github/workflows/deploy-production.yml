@@ -1,9 +1,12 @@
-name: deploy
+name: production deploy
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - staging deploy
+      - trigger for production
+    types:
+      - completed
 
 env:
   GCP_REGION: ${{ secrets.GCP_REGION }}
@@ -15,13 +18,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install
+        working-directory: './scripts/leaderboard'
+        run: yarn install --frozen-lockfile
+      - name: Migrate
+        working-directory: './scripts/leaderboard'
+        run: yarn prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
       - name: Publish
         uses: cloudflare/wrangler-action@next
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           workingDirectory: './scripts/leaderboard'
           preCommands: |
-            yarn install --frozen-lockfile
             echo $SUPABASE_URL | wrangler secret put SUPABASE_URL
             echo $SUPABASE_ANON_KEY | wrangler secret put SUPABASE_ANON_KEY
             echo $SUPABASE_API_KEY | wrangler secret put SUPABASE_API_KEY
@@ -37,25 +47,6 @@ jobs:
   deploy-measure:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-      - id: "auth"
-        uses: "google-github-actions/auth@v0"
-        with:
-          credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
-      - name: Configure docker to use the gcloud cli
-        run: gcloud auth configure-docker --quiet
-      - name: Pull the docker image for cache
-        run: docker pull -q ${{ env.CACHE_CONTAINER_REGISTRY }}:cache | true
-      - name: Build a docker image
-        run: docker build --cache-from ${{ env.CACHE_CONTAINER_REGISTRY }}:cache -t ${{ env.IMAGE }} -f scripts/measure/Dockerfile .
-      - name: Tag a container image
-        run: docker tag ${{ env.IMAGE }} ${{ env.CACHE_CONTAINER_REGISTRY }}:cache
-      - name: Push the docker image
-        run: |
-          docker push ${{ env.IMAGE }} &
-          docker push ${{ env.CACHE_CONTAINER_REGISTRY }}:cache &
-          wait
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0

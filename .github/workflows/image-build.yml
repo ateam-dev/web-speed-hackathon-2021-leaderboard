@@ -1,0 +1,34 @@
+name: image build
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CACHE_CONTAINER_REGISTRY: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/web-speed-hackathon-2021-measure
+  IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/web-speed-hackathon-2021-measure:${{ github.sha }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - id: "auth"
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
+      - name: Configure docker to use the gcloud cli
+        run: gcloud auth configure-docker --quiet
+      - name: Pull the docker image for cache
+        run: docker pull -q ${{ env.CACHE_CONTAINER_REGISTRY }}:cache | true
+      - name: Build a docker image
+        run: docker build --cache-from ${{ env.CACHE_CONTAINER_REGISTRY }}:cache -t ${{ env.IMAGE }} -f scripts/measure/Dockerfile .
+      - name: Tag a container image
+        run: docker tag ${{ env.IMAGE }} ${{ env.CACHE_CONTAINER_REGISTRY }}:cache
+      - name: Push the docker image
+        run: |
+          docker push ${{ env.IMAGE }} &
+          docker push ${{ env.CACHE_CONTAINER_REGISTRY }}:cache &
+          wait

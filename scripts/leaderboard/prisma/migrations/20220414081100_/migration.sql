@@ -1,6 +1,8 @@
 -- This code was created manually.
 -- enable moddatetime
-create extension moddatetime;
+-- WARNING!!! Please pre-run this SQL from the supabase web console.
+-- This operation can only be performed by a super user.
+-- create extension moddatetime;
 
 -- create trigger
 create trigger handle_updated_at_Team before update on "Team"
