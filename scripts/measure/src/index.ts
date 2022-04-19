@@ -16,7 +16,12 @@ server.post<{
     await updateQueueStatus(request.params.queueId, 'RUNNING');
     const team = await fetchTeamInfo(request.params.queueId);
 
-    const vrtUrl = await executeVrt(request.params.queueId, team.pageUrl);
+    const vrtResult = await executeVrt(request.params.queueId, team.pageUrl);
+    if (!vrtResult.success) {
+      await createMeasurement(team.id, 0, vrtResult.url, vrtResult.message);
+      await updateQueueStatus(request.params.queueId, 'FAILED');
+      return;
+    }
 
     // スコアの取得
     const { result } = await mainScoring(request.params.queueId, team.pageUrl);
@@ -24,7 +29,7 @@ server.post<{
       throw result.error;
     }
     // スコアの記録
-    await createMeasurement(team.id, result.score, vrtUrl);
+    await createMeasurement(team.id, result.score, vrtResult.url, '正常に計測が完了しました。');
     await updateQueueStatus(request.params.queueId, 'DONE');
 
     return result;
