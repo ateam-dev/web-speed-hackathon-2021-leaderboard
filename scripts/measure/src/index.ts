@@ -1,7 +1,11 @@
 import fastify from 'fastify';
 import { main as mainScoring } from '@web-speed-hackathon/scoring';
-import { updateQueueStatus, createMeasurement, fetchTeamInfo } from './database';
 import { executeVrt } from './vrt';
+import {
+  startMeasurement,
+  updateQueueStatusToFail,
+  updateQueueStatusToDone,
+} from './measure';
 
 const server = fastify();
 
@@ -11,30 +15,40 @@ server.get('/ping', async (_request, _reply) => {
 
 server.post<{
   Params: {queueId: string}
-}>('/execute/:queueId', async (request, _reply) => {
-  try {
-    await updateQueueStatus(request.params.queueId, 'RUNNING');
-    const team = await fetchTeamInfo(request.params.queueId);
+}>('/execute/:queueId', async (request, reply) => {
+  let team = null;
+  let vrtResult = null;
 
+  try {
+    // 計測開始
+    team = await startMeasurement(request.params.queueId);
+    if (team === null) {
+      reply.callNotFound();
+      return;
+    }
+
+    // VRTの実行
     const vrtResult = await executeVrt(request.params.queueId, team.pageUrl);
     if (!vrtResult.success) {
-      await createMeasurement(team.id, 0, vrtResult.url, vrtResult.message);
-      await updateQueueStatus(request.params.queueId, 'FAILED');
+      await updateQueueStatusToFail(request.params.queueId, team.id, vrtResult.url, vrtResult.message);
+      reply.status(400);
       return;
     }
 
     // スコアの取得
     const { result } = await mainScoring(request.params.queueId, team.pageUrl);
     if ('error' in result) {
-      throw result.error;
+      await updateQueueStatusToFail(request.params.queueId, team.id, vrtResult.url, `スコア計測ができませんでした: ${result.error.message}`);
+      reply.status(400);
+      return;
     }
-    // スコアの記録
-    await createMeasurement(team.id, result.score, vrtResult.url, '正常に計測が完了しました。');
-    await updateQueueStatus(request.params.queueId, 'DONE');
+
+    // 計測終了
+    await updateQueueStatusToDone(request.params.queueId, team.id, vrtResult.url, result.score);
 
     return result;
   } catch (e) {
-    await updateQueueStatus(request.params.queueId, 'FAILED');
+    await updateQueueStatusToFail(request.params.queueId, team.id, vrtResult?.url ?? 'none', `スコア計測が異常終了しました: ${e.message}`);
     throw e;
   }
 });
