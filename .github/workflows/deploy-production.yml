@@ -4,7 +4,6 @@ on:
   workflow_run:
     workflows:
       - staging deploy
-      - trigger for production
     types:
       - completed
 
@@ -15,6 +14,8 @@ env:
 
 jobs:
   deploy-frontend:
+    environment:
+      name: production
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,6 +46,8 @@ jobs:
           ALLOWED_EMAIL_DOMAIN: ${{ secrets.ALLOWED_EMAIL_DOMAIN }}
           MEASURE_SERVER_URI: ${{ secrets.MEASURE_SERVER_URI }}
   deploy-measure:
+    environment:
+      name: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
