@@ -1,11 +1,17 @@
 import { supabaseClient } from "~/libs/supabase.server";
 
 export const signup = async (variables: { email: string; name: string }) => {
-  const { data } = await supabaseClient
-    .from("User")
-    .upsert(variables, { onConflict: "email" })
-    .throwOnError();
-  return data;
+  try {
+    const { data } = await supabaseClient
+      .from("User")
+      .upsert(variables, { onConflict: "email" })
+      .throwOnError();
+
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 };
 
 export const createTeam = async (variables: { name: string }) => {
