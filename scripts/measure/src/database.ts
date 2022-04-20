@@ -8,7 +8,7 @@ const supabaseClient = createClient(
 export const fetchTeamInfo = async (queueId: string) => {
   const { data, error } = await supabaseClient
     .from<{ Team: { id: string; pageUrl: string } }>("Queue")
-    .select("Team(id, pageUrl)")
+    .select("Team!inner!Queue_teamId_fkey(id, pageUrl)")
     .match({ id: queueId, status: 'WAITING' });
   if (error?.message) {
     console.error(error.message);
