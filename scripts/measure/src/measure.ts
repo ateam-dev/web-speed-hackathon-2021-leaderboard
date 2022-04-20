@@ -18,5 +18,5 @@ export const updateQueueStatusToFail = async (queueId: string, teamId: string, v
 
 export const updateQueueStatusToDone = async (queueId: string, teamId: string, vrtUrl: string, score: number) => {
   await createMeasurement(teamId, queueId, score, vrtUrl, '正常に計測が完了しました。');
-  await updateQueueStatus(queueId, 'FAILED');
+  await updateQueueStatus(queueId, 'DONE');
 }
