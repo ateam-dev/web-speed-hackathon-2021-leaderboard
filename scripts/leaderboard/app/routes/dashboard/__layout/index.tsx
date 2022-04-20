@@ -73,7 +73,13 @@ const Index = () => {
 
   return (
     <>
-      <Statistics scores={scores} />
+      <Stack direction={["column", "row"]} spacing={8}>
+        <MeasurementRequest teamId={team.id} url={team.pageUrl ?? ""} />
+        <QueueList queues={queues} />
+      </Stack>
+      <Box mt={8}>
+        <Statistics scores={scores} />
+      </Box>
       <Box mt={8} height="600px">
         <Flex alignItems="end" mb={4} direction="row-reverse">
           <Box>
@@ -89,10 +95,6 @@ const Index = () => {
         {flag ? <Ranking data={scores} /> : <Chart data={scores} />}
         <ObserveAndRefresh />
       </Box>
-      <Stack direction={["column", "row"]} mt={32} spacing={8}>
-        <MeasurementRequest teamId={team.id} url={team.pageUrl ?? ""} />
-        <QueueList queues={queues} />
-      </Stack>
     </>
   );
 };
