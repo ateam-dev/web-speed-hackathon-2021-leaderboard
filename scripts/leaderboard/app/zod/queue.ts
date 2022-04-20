@@ -1,7 +1,7 @@
 import * as z from "zod"
 import * as imports from "./customs"
 import { queue_status } from "@prisma/client"
-import { CompleteTeam, RelatedTeamModel } from "./index"
+import { CompleteTeam, RelatedTeamModel, CompleteMeasurement, RelatedMeasurementModel } from "./index"
 
 // Helper schema for JSON fields
 type Literal = boolean | number | string
@@ -20,6 +20,7 @@ export const QueueModel = z.object({
 
 export interface CompleteQueue extends z.infer<typeof QueueModel> {
   Team: CompleteTeam
+  Measurement?: CompleteMeasurement | null
 }
 
 /**
@@ -29,4 +30,5 @@ export interface CompleteQueue extends z.infer<typeof QueueModel> {
  */
 export const RelatedQueueModel: z.ZodSchema<CompleteQueue> = z.lazy(() => QueueModel.extend({
   Team: RelatedTeamModel,
+  Measurement: RelatedMeasurementModel.nullish(),
 }))

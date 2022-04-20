@@ -23,13 +23,12 @@ const queue = () => {
 
   return {
     status: faker.random.arrayElement(['DONE', 'FAILED']),
-    Measurement: measure(),
     createdAt: datetime,
     updatedAt: datetime,
   }
 }
 
-const measure = () => {
+const measure = (status: 'DONE' | 'FAILED', teamId: string, queueId: string) => {
   const datetime = faker.date.between(
     "2022-04-01T10:00:00.000Z",
     "2022-04-01T19:00:00.000Z"
@@ -37,9 +36,11 @@ const measure = () => {
   const score = faker.datatype.number({ min: 0, max: 100 });
 
   return {
+    teamId,
+    queueId,
     score,
     vrtUrl: 'https://example.com/archive.zip',
-    message: '正常に計測が完了しました。',
+    message: status === 'DONE' ? '正常に計測が完了しました。' : '計測に失敗しました。',
     createdAt: datetime,
     updatedAt: datetime,
   };
@@ -76,6 +77,11 @@ async function main() {
       })
     )
   );
+
+  const queues = await prisma.queue.findMany();
+  await prisma.measurement.createMany({
+    data: queues.map(queue => measure(queue.status as 'DONE' | 'FAILED', queue.teamId, queue.id))
+  });
 }
 
 main()
