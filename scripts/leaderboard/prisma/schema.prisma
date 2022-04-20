@@ -50,6 +50,7 @@ model User {
 model Measurement {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   teamId    String   @db.Uuid
+  queueId   String   @db.Uuid
   score     Float
   message   String
   vrtUrl    String
@@ -57,6 +58,7 @@ model Measurement {
   updatedAt DateTime @default(now())
 
   Team Team @relation(fields: [teamId], references: [id])
+  Queue Queue @relation(fields: [queueId], references: [id])
 }
 
 enum queue_status {
@@ -75,4 +77,5 @@ model Queue {
   updatedAt DateTime    @default(now())
 
   Team Team @relation(fields: [teamId], references: [id])
+  Measurement Measurement?
 }

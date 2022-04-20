@@ -12,11 +12,11 @@ export const startMeasurement = async (queueId: string) => {
 }
 
 export const updateQueueStatusToFail = async (queueId: string, teamId: string, vrtUrl: string, message: string) => {
-  await createMeasurement(teamId, 0, vrtUrl, message);
+  await createMeasurement(teamId, queueId, 0, vrtUrl, message);
   await updateQueueStatus(queueId, 'FAILED');
 }
 
 export const updateQueueStatusToDone = async (queueId: string, teamId: string, vrtUrl: string, score: number) => {
-  await createMeasurement(teamId, score, vrtUrl, '正常に計測が完了しました。');
+  await createMeasurement(teamId, queueId, score, vrtUrl, '正常に計測が完了しました。');
   await updateQueueStatus(queueId, 'FAILED');
 }

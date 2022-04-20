@@ -1,10 +1,11 @@
 import * as z from "zod"
 import * as imports from "./customs"
-import { CompleteTeam, RelatedTeamModel } from "./index"
+import { CompleteTeam, RelatedTeamModel, CompleteQueue, RelatedQueueModel } from "./index"
 
 export const MeasurementModel = z.object({
   id: z.string(),
   teamId: z.string(),
+  queueId: z.string(),
   score: z.number(),
   message: z.string(),
   vrtUrl: z.string(),
@@ -14,6 +15,7 @@ export const MeasurementModel = z.object({
 
 export interface CompleteMeasurement extends z.infer<typeof MeasurementModel> {
   Team: CompleteTeam
+  Queue: CompleteQueue
 }
 
 /**
@@ -23,4 +25,5 @@ export interface CompleteMeasurement extends z.infer<typeof MeasurementModel> {
  */
 export const RelatedMeasurementModel: z.ZodSchema<CompleteMeasurement> = z.lazy(() => MeasurementModel.extend({
   Team: RelatedTeamModel,
+  Queue: RelatedQueueModel,
 }))
