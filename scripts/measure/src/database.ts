@@ -37,13 +37,14 @@ export const updateQueueStatus = async (
 
 export const createMeasurement = async (
   teamId: string,
+  queueId: string,
   score: number,
   vrtUrl: string,
   message: string
 ) => {
   const { data, error } = await supabaseClient
     .from("Measurement")
-    .insert({ teamId, score, vrtUrl, message });
+    .insert({ teamId, queueId, score, vrtUrl, message });
   if (error?.message) {
     console.error(error.message);
     throw new Error(error.message);

@@ -17,6 +17,7 @@ export const QueueList = ({
   queues: {
     createdAt: string;
     status: queue_status;
+    vrtUrl: string | null;
     duration: number | null;
   }[];
 }) => {
@@ -28,11 +29,12 @@ export const QueueList = ({
             <Tr>
               <Th>Registered</Th>
               <Th>Status</Th>
+              <Th>VRT</Th>
               <Th isNumeric>Duration</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {queues.map(({ createdAt, status, duration }, index) => (
+            {queues.map(({ createdAt, status, vrtUrl, duration }, index) => (
               <Tr key={index}>
                 <Td>{createdAt}</Td>
                 <Td
@@ -42,6 +44,9 @@ export const QueueList = ({
                   )}
                 >
                   {status}
+                </Td>
+                <Td>
+                  {vrtUrl ? <a href={vrtUrl}>download</a> : null}
                 </Td>
                 <Td isNumeric>
                   {duration !== null ? `${duration.toLocaleString()} s` : "-"}

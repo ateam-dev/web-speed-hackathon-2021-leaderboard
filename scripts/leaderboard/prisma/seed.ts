@@ -15,6 +15,20 @@ const user = () => {
   };
 };
 
+const queue = () => {
+  const datetime = faker.date.between(
+    "2022-04-01T10:00:00.000Z",
+    "2022-04-01T19:00:00.000Z"
+  );
+
+  return {
+    status: faker.random.arrayElement(['DONE', 'FAILED']),
+    Measurement: measure(),
+    createdAt: datetime,
+    updatedAt: datetime,
+  }
+}
+
 const measure = () => {
   const datetime = faker.date.between(
     "2022-04-01T10:00:00.000Z",
@@ -48,9 +62,9 @@ async function main() {
     Users: {
       create: [...Array(faker.datatype.number(3))].map(() => user()),
     },
-    Measurements: {
+    Queues: {
       create: [...Array(faker.datatype.number({ min: 5, max: 15 }))].map(() =>
-        measure()
+        queue()
       ),
     },
   }));
