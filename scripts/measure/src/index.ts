@@ -48,7 +48,10 @@ server.post<{
 
     return result;
   } catch (e) {
-    await updateQueueStatusToFail(request.params.queueId, team.id, vrtResult?.url ?? 'none', `スコア計測が異常終了しました: ${e.message}`);
+    console.error(e);
+    if (team) {
+      await updateQueueStatusToFail(request.params.queueId, team.id, vrtResult?.url ?? 'none', `スコア計測が異常終了しました: ${e.message}`);
+    }
     throw e;
   }
 });
