@@ -26,7 +26,7 @@ export async function captureScreenshot({ url, width, height }: Params): Promise
     await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
     await page.goto(url, {
       timeout: 60 * 1000,
-      waitUntil: 'domcontentloaded', // TODO: networkidle0だとタイムアウトでなぜか取れないので一旦これで逃げる
+      waitUntil: 'networkidle0',
     });
     await page.waitForTimeout(10 * 1000);
 
