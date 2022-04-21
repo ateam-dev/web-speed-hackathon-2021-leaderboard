@@ -1,6 +1,6 @@
-import fetch from 'node-fetch';
-import * as chromeLauncher from 'chrome-launcher';
-import puppeteer from 'puppeteer-core';
+import fetch from "node-fetch";
+import * as chromeLauncher from "chrome-launcher";
+import puppeteer from "puppeteer-core";
 
 type Params = {
   url: string;
@@ -8,9 +8,13 @@ type Params = {
   height: number;
 };
 
-export async function captureScreenshot({ url, width, height }: Params): Promise<Buffer | null> {
+export async function captureScreenshot({
+  url,
+  width,
+  height,
+}: Params): Promise<Buffer | null> {
   const chrome = await chromeLauncher.launch({
-    chromeFlags: ['--headless', '--no-sandbox', '--hide-scrollbars'],
+    chromeFlags: ["--headless", "--no-sandbox", "--hide-scrollbars"],
   });
 
   try {
@@ -23,12 +27,22 @@ export async function captureScreenshot({ url, width, height }: Params): Promise
     const page = await context.newPage();
 
     await page.setViewport({ width, height });
-    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-    await page.goto(url, {
-      timeout: 60 * 1000,
-      waitUntil: 'networkidle0',
-    });
+    await page.emulateMediaFeatures([
+      { name: "prefers-reduced-motion", value: "reduce" },
+    ]);
+    console.log(`Go to: ${url}`);
+    try {
+      await page.goto(url, {
+        timeout: 60 * 1000,
+        waitUntil: "networkidle0",
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+    console.log(`Loaded: ${url}`);
     await page.waitForTimeout(10 * 1000);
+    console.log(`Waited: 10s`);
 
     const screenshot = (await page.screenshot({
       captureBeyondViewport: false,
