@@ -12,7 +12,7 @@ type Props = {
 
 export const MeasurementRequest = ({ teamId, url }: Props) => {
   return (
-    <Box rounded="lg" p={6} borderWidth={2} w="full" maxH="160px">
+    <Box rounded="lg" p={6} borderWidth={2} w="full">
       <Heading
         as="h2"
         fontSize={{ base: "xl", sm: "2xl" }}

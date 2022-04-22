@@ -74,8 +74,12 @@ const Index = () => {
   return (
     <>
       <Stack direction={["column", "row"]} spacing={8}>
-        <MeasurementRequest teamId={team.id} url={team.pageUrl ?? ""} />
-        <QueueList queues={queues} />
+        <Box maxH="160px" w="full">
+          <MeasurementRequest teamId={team.id} url={team.pageUrl ?? ""} />
+        </Box>
+        <Box maxH="200px" overflowY="scroll" w="full">
+          <QueueList queues={queues} />
+        </Box>
       </Stack>
       <Box mt={8}>
         <Statistics scores={scores} />

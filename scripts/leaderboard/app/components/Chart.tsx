@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { useCallback, useState } from "react";
 import { strToColor } from "~/libs/str-to-color";
+import dayjs from "dayjs";
 
 type Props = {
   data: {
@@ -34,9 +35,7 @@ export const Chart = ({ data }: Props) => {
         <XAxis
           dataKey="createdAt"
           domain={["dataMin", "dataMax"]}
-          tickFormatter={(unixTime) =>
-            new Date(unixTime).toLocaleString().slice(0, -3)
-          }
+          tickFormatter={(unixTime) => dayjs(unixTime).format("MM/DD HH:mm")}
           type="number"
         />
         <YAxis dataKey="score" />

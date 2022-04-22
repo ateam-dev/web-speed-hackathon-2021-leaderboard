@@ -6,7 +6,14 @@ export const myQueues = async ({
 }: {
   email: string;
 }): Promise<
-  { createdAt: string; status: queue_status; vrtUrl: string | null; duration: null | number }[]
+  {
+    createdAt: string;
+    status: queue_status;
+    vrtUrl: string | null;
+    message: string | null;
+    score: number | null;
+    duration: null | number;
+  }[]
 > => {
   const { data } = await supabaseClient
     .from<{
@@ -15,13 +22,17 @@ export const myQueues = async ({
       updatedAt: string;
       Measurement: {
         vrtUrl: string;
+        message: string;
+        score: number;
       }[];
       "Team.User.email": string;
     }>("Queue")
-    .select("createdAt, status, updatedAt, Measurement(vrtUrl), Team!inner!Queue_teamId_fkey(User!inner(email))")
+    .select(
+      "createdAt, status, updatedAt, Measurement(vrtUrl, message, score), Team!inner!Queue_teamId_fkey(User!inner(email))"
+    )
     .eq("Team.User.email", email)
     .order("createdAt", { ascending: false })
-    .limit(5)
+    .limit(10)
     .throwOnError();
   if (!data) return [];
 
@@ -35,7 +46,9 @@ export const myQueues = async ({
     return {
       createdAt,
       status,
-      vrtUrl: Measurement[0]?.vrtUrl,
+      vrtUrl: Measurement[0]?.vrtUrl ?? null,
+      message: Measurement[0]?.message ?? null,
+      score: Measurement[0]?.score ?? null,
       duration,
     };
   });
