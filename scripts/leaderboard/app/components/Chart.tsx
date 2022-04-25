@@ -20,12 +20,12 @@ type Props = {
 };
 
 export const Chart = ({ data }: Props) => {
-  const [hovering, serHovering] = useState<string | null>(null);
+  const [hovering, setHovering] = useState<string | null>(null);
   const mouseEnter = useCallback((e: { value: string }) => {
-    serHovering(e.value);
+    setHovering(e.value);
   }, []);
   const mouseLeave = useCallback(() => {
-    serHovering(null);
+    setHovering(null);
   }, []);
 
   return (
