@@ -7,9 +7,15 @@ import {
   Th,
   Thead,
   Tr,
+  Link,
+  Tooltip,
+  Text,
+  Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { BiMessageDots } from "react-icons/bi";
 import { queue_status } from "@prisma/client";
+import dayjs from "dayjs";
 
 export const QueueList = ({
   queues,
@@ -19,6 +25,8 @@ export const QueueList = ({
     status: queue_status;
     vrtUrl: string | null;
     duration: number | null;
+    message: string | null;
+    score: number | null;
   }[];
 }) => {
   return (
@@ -29,30 +37,52 @@ export const QueueList = ({
             <Tr>
               <Th>Registered</Th>
               <Th>Status</Th>
-              <Th>VRT</Th>
               <Th isNumeric>Duration</Th>
+              <Th isNumeric>Score</Th>
+              <Th>VRT</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {queues.map(({ createdAt, status, vrtUrl, duration }, index) => (
-              <Tr key={index}>
-                <Td>{createdAt}</Td>
-                <Td
-                  color={useColorModeValue(
-                    `${statusColor(status)}.500`,
-                    `${statusColor(status)}.600`
-                  )}
-                >
-                  {status}
-                </Td>
-                <Td>
-                  {vrtUrl ? <a href={vrtUrl}>download</a> : null}
-                </Td>
-                <Td isNumeric>
-                  {duration !== null ? `${duration.toLocaleString()} s` : "-"}
-                </Td>
-              </Tr>
-            ))}
+            {queues.map(
+              (
+                { createdAt, status, vrtUrl, duration, score, message },
+                index
+              ) => (
+                <Tr key={index}>
+                  <Td>{dayjs(createdAt).format("MM/DD HH:mm")}</Td>
+                  <Td>
+                    <Stack direction={["column", "row"]}>
+                      <Text
+                        color={useColorModeValue(
+                          `${statusColor(status)}.500`,
+                          `${statusColor(status)}.600`
+                        )}
+                      >
+                        {status}
+                      </Text>
+                      {message && (
+                        <Tooltip label={message} fontSize="md">
+                          <span>
+                            <BiMessageDots size="1.4rem" />
+                          </span>
+                        </Tooltip>
+                      )}
+                    </Stack>
+                  </Td>
+                  <Td isNumeric>
+                    {duration !== null ? `${duration.toLocaleString()} s` : "-"}
+                  </Td>
+                  <Td>{score !== null ? `${score} pt` : "-"}</Td>
+                  <Td>
+                    {vrtUrl ? (
+                      <Link href={vrtUrl} download color="teal.500">
+                        download
+                      </Link>
+                    ) : null}
+                  </Td>
+                </Tr>
+              )
+            )}
           </Tbody>
         </Table>
       </TableContainer>
