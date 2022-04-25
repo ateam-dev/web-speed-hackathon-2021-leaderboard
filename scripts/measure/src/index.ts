@@ -30,7 +30,7 @@ server.post<{
     // VRTの実行
     const vrtResult = await executeVrt(request.params.queueId, team.pageUrl);
     if (!vrtResult.success) {
-      await updateQueueStatusToFail(request.params.queueId, team.id, vrtResult.url, vrtResult.message);
+      await updateQueueStatusToFail(request.params.queueId, team.id, vrtResult.url ?? 'none', vrtResult.message);
       reply.status(400);
       return;
     }
