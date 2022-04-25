@@ -74,7 +74,7 @@ export const QueueList = ({
                   </Td>
                   <Td>{score !== null ? `${score} pt` : "-"}</Td>
                   <Td>
-                    {vrtUrl ? (
+                    {vrtUrl?.startsWith("http") ? (
                       <Link href={vrtUrl} download color="teal.500">
                         download
                       </Link>
