@@ -9,8 +9,8 @@ on:
 
 env:
   GCP_REGION: ${{ secrets.GCP_REGION }}
-  CACHE_CONTAINER_REGISTRY: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/web-speed-hackathon-2021-measure
   IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/web-speed-hackathon-2021-measure:${{ github.sha }}
+  GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
 jobs:
   deploy-frontend:
@@ -63,5 +63,6 @@ jobs:
           service: web-speed-hackathon-2021-measure
           image: ${{ env.IMAGE }}
           region: ${{ env.GCP_REGION }}
-          env_vars: 'SUPABASE_URL=${{ secrets.SUPABASE_URL }},SUPABASE_API_KEY=${{ secrets.SUPABASE_API_KEY }},BUCKET_NAME=${{ secrets.BUCKET_NAME }}'
+          env_vars: 'SUPABASE_URL=${{ secrets.SUPABASE_URL }},SUPABASE_API_KEY=${{ secrets.SUPABASE_API_KEY }},BUCKET_NAME=${{ secrets.BUCKET_NAME }},GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},GCP_REGION=${{ env.GCP_REGION }},GCP_CLOUD_TASK_QUEUE_NAME=${{ secrets.GCP_CLOUD_TASK_QUEUE_NAME }},MEASURE_SERVER_URI=${{ secrets.MEASURE_SERVER_URI }}'
           flags: "--allow-unauthenticated --cpu=2 --memory=4Gi --concurrency=1 --timeout=10m"
+          service_account: ${{ env.GCP_SERVICE_ACCOUNT }}
