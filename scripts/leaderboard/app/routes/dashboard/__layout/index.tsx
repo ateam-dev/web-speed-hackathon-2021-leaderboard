@@ -25,7 +25,6 @@ import { myQueues } from "~/request/Queue";
 import { supabaseStrategy } from "~/libs/auth.server";
 import { promiseHash } from "remix-utils";
 import { Statistics } from "~/components/Statistics";
-import { backdoorCookie } from "~/libs/backdoor.server";
 
 type Data = {
   scores: Awaited<ReturnType<typeof scoresForGraph>>;
@@ -33,12 +32,6 @@ type Data = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // TODO: remove
-  const cookie =
-    (await backdoorCookie.parse(request.headers.get("Cookie"))) ?? {};
-  if (process.env.NODE_ENV === "production" && !cookie.nakanohito)
-    return redirect("/dashboard/standby");
-
   const session = await supabaseStrategy.checkSession(request);
 
   return promiseHash({
