@@ -8,13 +8,32 @@
 - デモサイト: https://web-speed-hackathon-2021.herokuapp.com/
 - 参加方法: https://github.com/CyberAgentHack/web-speed-hackathon-2021
 
+## リーダーボード
+
+![](./docs/images/dashboard.png)
+
+本アプリケーションはCyberAgent様にて実施された「Web Speed Hackathon 2021 mini」を[ISUCON](https://isucon.net/)形式にイベントを行うためのアプリエケーションです。実施するためのアプリケーションは以下の2つで構成されています。
+
+- [leaderboard](./scripts/leaderboard)
+  競技のスコア表示などを行うフロントエンドアプリケーションです。以下の機能が存在します。
+    - サインイン機能（Googleアカウント）
+    - チーム作成機能
+    - チーム参加機能
+    - 計測開始機能
+    - 計測結果表示機能
+    - 全チームスコア表示機能
+- [measure](./scripts/measure)
+  各チームの競技対象アプリケーションを計測結果を記録します。以下の機能が存在します。
+    - VRT実行機能
+    - スコアリング実行機能
+
 ## 運営からのお知らせ
 
 [./docs/ANNOUNCEMENT.md](./docs/ANNOUNCEMENT.md) をご覧ください
 
-## リーダーボード
+## 順位掲載（過去実施）
 
-**上位 10 位までを表示しています**
+**CyberAgent様にて実施された上位 10 位までを表示しています**
 
 すべてのスコアは、[こちら](./score.csv) から閲覧できます
 
