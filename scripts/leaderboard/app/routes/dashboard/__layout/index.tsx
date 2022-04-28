@@ -25,9 +25,6 @@ import { myQueues } from "~/request/Queue";
 import { supabaseStrategy } from "~/libs/auth.server";
 import { promiseHash } from "remix-utils";
 import { Statistics } from "~/components/Statistics";
-import { getMyTeam } from "~/request/Teaming";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 
 type Data = {
   scores: Awaited<ReturnType<typeof scoresForGraph>>;
@@ -37,15 +34,9 @@ type Data = {
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await supabaseStrategy.checkSession(request);
 
-  dayjs.extend(utc);
-  const team =
-    dayjs() > dayjs("2022-04-28 08:00:00").utc(true)
-      ? await getMyTeam({ email: session?.user?.email ?? "" })
-      : null;
-
   return promiseHash({
     queues: myQueues({ email: session?.user?.email ?? "" }),
-    scores: scoresForGraph(team?.id),
+    scores: scoresForGraph(),
   });
 };
 
