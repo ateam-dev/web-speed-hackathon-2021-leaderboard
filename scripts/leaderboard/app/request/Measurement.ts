@@ -1,6 +1,6 @@
 import { supabaseClient } from "~/libs/supabase.server";
 
-export const scoresForGraph = async () => {
+export const scoresForGraph = async (teamId?: string | null) => {
   const { data } = await supabaseClient
     .from<{
       id: string;
@@ -8,6 +8,7 @@ export const scoresForGraph = async () => {
       data: { createdAt: string; score: number }[];
     }>("Team")
     .select("id, name, data:Measurement(createdAt, score)")
+    .match(teamId ? { id: teamId } : {})
     .throwOnError();
 
   return (
@@ -24,12 +25,9 @@ export const scoresForGraph = async () => {
 };
 
 export const activate = async (queueId: string) => {
-  const response = await fetch(
-    `${MEASURE_SERVER_URI}/execute/${queueId}`,
-    {
-      method: 'POST',
-    }
-  )
+  const response = await fetch(`${MEASURE_SERVER_URI}/execute/${queueId}`, {
+    method: "POST",
+  });
 
-  return response
-}
+  return response;
+};
