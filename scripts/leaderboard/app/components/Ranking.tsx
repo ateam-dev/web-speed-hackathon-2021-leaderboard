@@ -26,7 +26,8 @@ export const Ranking = ({ data }: Props) => {
           return {
             id,
             name,
-            score,
+            // score,
+            score: 0,
           };
         })
         .sort(({ score: a }, { score: b }) => (a > b ? -1 : 1)),

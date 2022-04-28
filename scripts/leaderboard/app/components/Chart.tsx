@@ -45,7 +45,8 @@ export const Chart = ({ data }: Props) => {
             type="monotone"
             stroke={strToColor(id)}
             dataKey={"score"}
-            data={data}
+            data={null}
+            // data={data}
             name={name}
             key={id}
             strokeWidth={3}

@@ -121,7 +121,8 @@ const statistics = (
   const index = sorted.findIndex(({ id }) => id === teamId);
   if (index < 0) return { rank: null, score: 0 };
   return {
-    rank: sorted[index].score > 0 ? index + 1 : null,
+    // rank: sorted[index].score > 0 ? index + 1 : null,
+    rank: null,
     score: sorted[index].score,
   };
 };
