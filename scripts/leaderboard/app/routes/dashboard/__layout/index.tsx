@@ -28,7 +28,6 @@ import { Statistics } from "~/components/Statistics";
 import { getMyTeam } from "~/request/Teaming";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { backdoorCookie } from "~/libs/backdoor.server";
 
 type Data = {
   scores: Awaited<ReturnType<typeof scoresForGraph>>;
@@ -38,11 +37,9 @@ type Data = {
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await supabaseStrategy.checkSession(request);
 
-  const cookie =
-    (await backdoorCookie.parse(request.headers.get("Cookie"))) ?? {};
   dayjs.extend(utc);
   const team =
-    dayjs() > dayjs("2022-04-28 08:00:00").utc(true) && !cookie.nakanohito
+    dayjs() > dayjs("2022-04-28 08:00:00").utc(true)
       ? await getMyTeam({ email: session?.user?.email ?? "" })
       : null;
 
