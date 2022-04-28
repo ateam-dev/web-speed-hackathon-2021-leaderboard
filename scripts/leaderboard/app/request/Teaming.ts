@@ -55,12 +55,7 @@ export const listTeams = async (): Promise<
 
 export const getMyTeam = async (variables: { email: string }) => {
   const { data } = await supabaseClient
-    .from<{
-      id: string;
-      name: string | null;
-      pageUrl: string | null;
-      "User.email": string;
-    }>("Team")
+    .from("Team")
     .select("*, User!inner(*)")
     .eq("User.email", variables.email)
     .single();
